@@ -3,3 +3,4 @@ psycopg2==2.9.9
 notebook==7.1.0
 pandas==2.2.1
 sqlalchemy==2.0.27
+pyspark==3.5.1
