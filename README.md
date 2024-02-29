@@ -86,3 +86,5 @@ What is the default rate by month and batch?
 | 2     | 1.0        | 5,221       | 178             | 3.41%        |
 
 Batches and months with lower default rates are generally more favorable because they indicate a lower likelihood of loan defaults.
+
+You can check the full analysis in the [Jupyter Notebook](notebooks\exploring.ipynb) or on the HTML page [here](results\exploring.html).
