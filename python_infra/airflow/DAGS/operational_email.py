@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Função para recuperar informações do banco de dados
 def retrieve_data():
     conn = psycopg2.connect(
             user=os.getenv("DB_USER"),
