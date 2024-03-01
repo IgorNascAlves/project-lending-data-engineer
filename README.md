@@ -105,7 +105,7 @@ Both functions utilize parameterized queries, ensuring protection against SQL in
 
 [client_management](python_infra/client_management.py)
 
-### automated email service
+### Automated email service
 
 * remind users with ongoing loans about payments
 * weekly email summarizing operation activities
@@ -114,11 +114,11 @@ To this part, I use Airflow DAGs to schedule the email sending. The DAGs are in 
 
 Certainly! Here's a revised explanation with the inclusion of links to the Python files for each DAG:
 
-### Client Interaction DAG:
+#### Client Interaction DAG:
 
 This DAG is responsible for managing communication with clients who have ongoing loans and need reminders about upcoming payments.
 
-#### Tasks:
+##### Tasks:
 
 1. **Client Check Task:** This task checks for all clients with ongoing loans whose payment due date falls within a certain timeframe from the current date. It identifies these clients and extracts their user IDs, then searches for their corresponding email addresses and saves them into a CSV file.
 
@@ -126,11 +126,11 @@ This DAG is responsible for managing communication with clients who have ongoing
 
 **Python File:** [clients_email.py](python_infra/airflow/DAGS/clients_email.py)
 
-### Weekly Operational Summary DAG:
+#### Weekly Operational Summary DAG:
 
 This DAG focuses on sending a weekly email summarizing operational activities.
 
-#### Tasks:
+##### Tasks:
 
 1. **Data Retrieval Task:** This task gathers relevant information from the database, such as the profit generated in the current month, loans issued in the current month, and the total amount of loans issued in the current month. It then saves this information into a CSV file.
 
