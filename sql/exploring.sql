@@ -30,3 +30,14 @@ GROUP BY status;
 SELECT status, COUNT(*) AS num_loans
 FROM Loans
 GROUP BY status;
+
+-- Check client id 0
+SELECT * FROM Clients WHERE user_id = 0;
+
+-- Check table users
+SELECT * FROM Users;
+
+CREATE TABLE IF NOT EXISTS users (
+            user_id SERIAL PRIMARY KEY,
+            email VARCHAR(255) UNIQUE NOT NULL
+        );

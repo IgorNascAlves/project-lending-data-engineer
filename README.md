@@ -1,6 +1,14 @@
 # Lending Operation Analysis
 
-## Results
+## Database
+
+The PostgreSQL database was set up with the scripts [create_db.py](scripts/create_db.py), [create_tables.py](scripts/create_tables.py), and [load_data.py](scripts/load_data.py).
+
+The relationship between the `Clients` and `Loans` tables allows for the association of loans with the respective clients who obtained them. Each client in the `Clients` table can have multiple loans associated with them, as indicated by the one-to-many relationship established through the `user_id` column.
+
+This conclusion provides a clear understanding of the structure and relationship between the database tables, facilitating efficient data management and analysis.
+
+## SQL and Data Viz Results
 
 ### 1. Loan Issuance Analysis
 
@@ -88,3 +96,46 @@ What is the default rate by month and batch?
 Batches and months with lower default rates are generally more favorable because they indicate a lower likelihood of loan defaults.
 
 You can check the full analysis in the [Jupyter Notebook](notebooks/exploring.ipynb) or on the HTML page [here](results/exploring.html).
+
+## Python and Infra Solution
+
+### First was developed a Python script with a function to add and alter users in the clients table in a safe way
+
+Both functions utilize parameterized queries, ensuring protection against SQL injection attacks by separating SQL code from data. Connection management is handled adeptly within try...finally blocks, guaranteeing closure of connections regardless of potential errors, thus preventing resource leaks. Error handling is comprehensive, effectively catching and logging any database interaction errors for troubleshooting. Sensible use of environment variables via os.getenv() and .env files maintains security by keeping sensitive database connection details out of the source code. Structured with clear control flow, the functions maintain readability and maintainability, bolstering overall code reliability.
+
+[client_management](python_infra/client_management.py)
+
+### automated email service
+
+* remind users with ongoing loans about payments
+* weekly email summarizing operation activities
+
+To this part, I use Airflow DAGs to schedule the email sending. The DAGs are in the [dags](python_infra/airflow/DAGS) folder.
+
+Certainly! Here's a revised explanation with the inclusion of links to the Python files for each DAG:
+
+### Client Interaction DAG:
+
+This DAG is responsible for managing communication with clients who have ongoing loans and need reminders about upcoming payments.
+
+#### Tasks:
+
+1. **Client Check Task:** This task checks for all clients with ongoing loans whose payment due date falls within a certain timeframe from the current date. It identifies these clients and extracts their user IDs, then searches for their corresponding email addresses and saves them into a CSV file.
+
+2. **Email Sending Task:** Once the CSV file is generated, this task reads the file and sends reminder emails to the identified clients based on a predefined email template.
+
+**Python File:** [clients_email.py](python_infra/airflow/DAGS/clients_email.py)
+
+### Weekly Operational Summary DAG:
+
+This DAG focuses on sending a weekly email summarizing operational activities.
+
+#### Tasks:
+
+1. **Data Retrieval Task:** This task gathers relevant information from the database, such as the profit generated in the current month, loans issued in the current month, and the total amount of loans issued in the current month. It then saves this information into a CSV file.
+
+2. **Email Composition and Sending Task:** After the CSV file is created, this task reads its contents, compiles the information into an email template suitable for a weekly operational summary, and sends it out.
+
+**Python File:** [operational_email.py](python_infra/airflow/DAGS/operational_email.py)
+
+In both DAGs, the tasks are orchestrated to ensure seamless execution of the workflow. This approach streamlines the process of communicating with clients regarding payments and provides stakeholders with regular updates on operational performance.
